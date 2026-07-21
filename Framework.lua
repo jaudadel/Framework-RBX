@@ -1,6 +1,7 @@
 --!strict
 -- FRAMEWORK BUILDER with integrated documentation
--- Paste the whole thing into Roblox Studio's Command Bar (View > Command Bar)
+-- Paste the whole thing into Roblox Studio's Command Bar (View > Command Bar) and run 
+
 
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -41,7 +42,7 @@ setSource(RS_FrameworkReadme, [==[
 	  - Only want Net (RemoteEvents)?  Copy Shared/Net and done.
 	  - Only want Services/Controllers but not ECS?  Fine, ignore the ECS folder.
 	  - Only want ECS but not Services?               Fine, ignore Services/Controllers.
-	See "_MODULOS_PORTABLES" (in this same folder) to know exactly what can be
+	See "_PORTABLE_MODULES" (in this same folder) to know exactly what can be
 	copied in isolation.
 
 	QUICK MAP (where everything is)
@@ -84,7 +85,7 @@ setSource(RS_FrameworkReadme, [==[
 	   where you'll be writing code every day.
 	2. Every important folder has its own "_README" explaining when to use it
 	   and when not to. Open them if you have doubts about a specific folder.
-	3. Read "_COMO_ESCALAR" once the project starts growing.
+	3. Read "_HOW_TO_SCALE" once the project starts growing.
 
 	This file does nothing, it's just text. Do not require() it from your code.
 ]]
@@ -92,8 +93,8 @@ setSource(RS_FrameworkReadme, [==[
 return nil
 ]==])
 
-local RS_FrameworkComoEscalar = make("ModuleScript", "_COMO_ESCALAR", RS_Framework)
-setSource(RS_FrameworkComoEscalar, [==[
+local RS_FrameworkHowToScale = make("ModuleScript", "_HOW_TO_SCALE", RS_Framework)
+setSource(RS_FrameworkHowToScale, [==[
 --!strict
 --[[
 	HOW TO SCALE WITH THIS FRAMEWORK
@@ -110,7 +111,7 @@ setSource(RS_FrameworkComoEscalar, [==[
 	  - That's where ECS starts paying off: World + Systems saves you from
 	    having one giant Service with "if enemy then ... elseif npc then ...".
 	  - Use TagBridge + CollectionService so you don't have to manually register
-	    each instance (see "_TAGS_Y_COLLECTIONSERVICE" inside Shared/ECS).
+	    each instance (see "_TAGS_AND_COLLECTIONSERVICE" inside Shared/ECS).
 
 	IF YOU WORK ALONE
 	  - Prioritize what you'll understand quickly in 6 months, not what's
@@ -128,7 +129,7 @@ setSource(RS_FrameworkComoEscalar, [==[
 	    external documentation or a 40-page Notion doc.
 
 	IF YOU USE COLLECTIONSERVICE (tags in Studio)
-	  - See "_TAGS_Y_COLLECTIONSERVICE" in Shared/ECS. Summary: tags + TagBridge
+	  - See "_TAGS_AND_COLLECTIONSERVICE" in Shared/ECS. Summary: tags + TagBridge
 	    for things that repeat a lot (enemies, doors, pickups). For unique
 	    things (a final boss, a menu) it's not needed, use a regular Service.
 
@@ -140,8 +141,8 @@ setSource(RS_FrameworkComoEscalar, [==[
 return nil
 ]==])
 
-local RS_FrameworkModulosPortables = make("ModuleScript", "_MODULOS_PORTABLES", RS_Framework)
-setSource(RS_FrameworkModulosPortables, [==[
+local RS_FrameworkPortableModules = make("ModuleScript", "_PORTABLE_MODULES", RS_Framework)
+setSource(RS_FrameworkPortableModules, [==[
 --!strict
 --[[
 	PORTABLE MODULES — what you can take to another project
@@ -184,8 +185,8 @@ setSource(RS_FrameworkModulosPortables, [==[
 return nil
 ]==])
 
-local RS_FrameworkIndice = make("ModuleScript", "_INDICE", RS_Framework)
-setSource(RS_FrameworkIndice, [==[
+local RS_FrameworkIndex = make("ModuleScript", "_INDEX", RS_Framework)
+setSource(RS_FrameworkIndex, [==[
 --!strict
 --[[
 	INDEX — START HERE
@@ -206,7 +207,7 @@ setSource(RS_FrameworkIndice, [==[
 
 	I WANT TO USE ECS?
 	  -> Shared/ECS/_README. If you're going to use CollectionService tags,
-	     also see Shared/ECS/_TAGS_Y_COLLECTIONSERVICE.
+	     also see Shared/ECS/_TAGS_AND_COLLECTIONSERVICE.
 
 	I WANT TO USE SIGNAL?
 	  -> Shared/Signal (the comment is at the top of the module itself).
@@ -218,7 +219,7 @@ setSource(RS_FrameworkIndice, [==[
 	  -> All of them, no exceptions. See Framework/_README, "GOLDEN RULE" section.
 
 	WHICH MODULES ARE PORTABLE?
-	  -> Framework/_MODULOS_PORTABLES.
+	  -> Framework/_PORTABLE_MODULES.
 
 	REMEMBER
 	None of this is mandatory. Use only what's useful to you, ignore the rest.
@@ -788,13 +789,13 @@ setSource(SharedECSReadme, [==[
 	No. You can delete this whole folder and the rest of the framework
 	(Services, Controllers, Signal, Net) keeps working exactly the same.
 
-	See also "_TAGS_Y_COLLECTIONSERVICE" in this same folder.
+	See also "_TAGS_AND_COLLECTIONSERVICE" in this same folder.
 ]]
 
 return nil
 ]==])
 
-local SharedECSTagsDoc = make("ModuleScript", "_TAGS_Y_COLLECTIONSERVICE", SharedECS)
+local SharedECSTagsDoc = make("ModuleScript", "_TAGS_AND_COLLECTIONSERVICE", SharedECS)
 setSource(SharedECSTagsDoc, [==[
 --!strict
 --[[
@@ -1303,7 +1304,7 @@ setSource(TagBridgeModule, [==[
 	Why it exists: so you don't have to manually register every enemy/door/
 	                object that exists on the map.
 	When to use it: when you use ECS and have many repeated instances with
-	               the same tag (see "_TAGS_Y_COLLECTIONSERVICE" in Shared/ECS).
+	               the same tag (see "_TAGS_AND_COLLECTIONSERVICE" in Shared/ECS).
 	When NOT to use it: for 1 or 2 unique instances, it's simpler to register
 	                  them by hand or use a regular Service.
 	Usage example:
