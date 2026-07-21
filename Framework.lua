@@ -1,6 +1,6 @@
 --!strict
--- FRAMEWORK BUILDER con documentación integrada
--- Pegar completo en la Command Bar de Roblox Studio (View > Command Bar)
+-- FRAMEWORK BUILDER v3 — with integrated documentation
+-- Paste the whole thing into Roblox Studio's Command Bar (View > Command Bar)
 
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -28,65 +28,65 @@ local RS_FrameworkReadme = make("ModuleScript", "_README", RS_Framework)
 setSource(RS_FrameworkReadme, [==[
 --!strict
 --[[
-	FRAMEWORK — LÉEME PRIMERO
+	FRAMEWORK — READ ME FIRST
 
-	¿QUÉ ES ESTO?
-	Una caja de herramientas para hacer juegos en Roblox. NO es un framework al
-	estilo Knit/Aero que te obliga a organizar todo tu juego de una forma concreta.
-	Aquí no hay nada obligatorio: usa solo lo que te sirva, ignora el resto.
+	WHAT IS THIS?
+	A toolbox for making Roblox games. It is NOT a Knit/Aero-style framework that
+	forces you to organize your whole game a specific way. Nothing here is mandatory:
+	use only what's useful to you, ignore the rest.
 
-	REGLA DE ORO
-	Ninguna pieza depende de que uses las demás.
-	  - ¿Solo quieres Signal?              Copia ReplicatedStorage/Framework/Shared/Signal y ya.
-	  - ¿Solo quieres Net (RemoteEvents)?  Copia Shared/Net y ya.
-	  - ¿Solo quieres Services/Controllers pero no ECS?  Perfecto, ignora la carpeta ECS.
-	  - ¿Solo quieres ECS pero no Services?               Perfecto, ignora Services/Controllers.
-	Ver "_MODULOS_PORTABLES" (en esta misma carpeta) para saber exactamente qué se
-	puede copiar de forma aislada.
+	GOLDEN RULE
+	No piece depends on you using the others.
+	  - Only want Signal?              Copy ReplicatedStorage/Framework/Shared/Signal and done.
+	  - Only want Net (RemoteEvents)?  Copy Shared/Net and done.
+	  - Only want Services/Controllers but not ECS?  Fine, ignore the ECS folder.
+	  - Only want ECS but not Services?               Fine, ignore Services/Controllers.
+	See "_MODULOS_PORTABLES" (in this same folder) to know exactly what can be
+	copied in isolation.
 
-	MAPA RÁPIDO (dónde está cada cosa)
+	QUICK MAP (where everything is)
 
 	ReplicatedStorage/Framework
-	  Types                -> tipos compartidos (Service/Controller), solo para el editor.
-	  Shared/Signal         -> eventos internos (Lua puro, sin RemoteEvents).
-	  Shared/Net            -> comunicación cliente-servidor (RemoteEvents/Functions).
-	  Shared/Boot/ModuleRegistry -> el motor genérico que carga Services y Controllers.
-	  Shared/ECS            -> sistema de Entidades-Componentes (World, System, TagBridge).
+	  Types                -> shared types (Service/Controller), editor-only.
+	  Shared/Signal         -> internal events (pure Lua, no RemoteEvents).
+	  Shared/Net            -> client-server communication (RemoteEvents/Functions).
+	  Shared/Boot/ModuleRegistry -> the generic engine that loads Services and Controllers.
+	  Shared/ECS            -> Entity-Component system (World, System, TagBridge).
 
 	ServerScriptService/Framework
-	  Boot/Loader           -> arranca tus Services.
-	  Services/             -> AQUÍ VAN TUS SERVICIOS (uno por ModuleScript).
-	  ECS/                  -> World del servidor + arranque de Systems del servidor.
-	  ECS/Systems/          -> AQUÍ VAN TUS SYSTEMS DE SERVIDOR.
+	  Boot/Loader           -> starts your Services.
+	  Services/             -> YOUR SERVICES GO HERE (one per ModuleScript).
+	  ECS/                  -> server World + server Systems bootstrap.
+	  ECS/Systems/          -> YOUR SERVER SYSTEMS GO HERE.
 
 	StarterPlayerScripts/Framework
-	  Boot/Loader           -> arranca tus Controllers.
-	  Controllers/          -> AQUÍ VAN TUS CONTROLLERS (uno por ModuleScript).
-	  ECS/                  -> World del cliente + arranque de Systems del cliente.
-	  ECS/Systems/          -> AQUÍ VAN TUS SYSTEMS DE CLIENTE.
+	  Boot/Loader           -> starts your Controllers.
+	  Controllers/          -> YOUR CONTROLLERS GO HERE (one per ModuleScript).
+	  ECS/                  -> client World + client Systems bootstrap.
+	  ECS/Systems/          -> YOUR CLIENT SYSTEMS GO HERE.
 
-	CÓMO SE CARGA TODO
-	Cada Bootstrap (un Script/LocalScript normal) llama a su Loader. El Loader
-	busca automáticamente la carpeta "Services"/"Controllers"/"Systems" que
-	está a su lado y hace require() de cada ModuleScript que encuentre ahí
-	(ignorando los que empiecen con "_", que son documentación).
-	No hay magia oculta: si quieres ver exactamente qué pasa, abre
-	Shared/Boot/ModuleRegistry o ECS/SystemRegistry, tienen menos de 100 líneas.
+	HOW EVERYTHING LOADS
+	Each Bootstrap (a regular Script/LocalScript) calls its Loader. The Loader
+	automatically looks for the "Services"/"Controllers"/"Systems" folder next
+	to it and does require() on every ModuleScript found there
+	(ignoring ones that start with "_", which are documentation).
+	There's no hidden magic: if you want to see exactly what happens, open
+	Shared/Boot/ModuleRegistry or ECS/SystemRegistry, they're both under 100 lines.
 
-	CONVENCIÓN DEL GUION BAJO "_"
-	Cualquier ModuleScript que empiece con "_" (como este mismo archivo) es
-	documentación o está desactivado a propósito. El framework nunca lo requiere
-	ni lo ejecuta. Puedes usarlo también para "apagar" un Service/Controller/System
-	sin borrarlo: solo pon un "_" delante de su nombre.
+	THE UNDERSCORE "_" CONVENTION
+	Any ModuleScript starting with "_" (like this very file) is
+	documentation or intentionally disabled. The framework never requires
+	or runs it. You can also use it to "turn off" a Service/Controller/System
+	without deleting it: just put a "_" in front of its name.
 
-	SI SOLO TIENES 5 MINUTOS
-	1. Mira las carpetas "Services", "Controllers" y "ECS/Systems": ahí es donde
-	   vas a escribir código todos los días.
-	2. Cada carpeta importante tiene su propio "_README" explicando cuándo usarla
-	   y cuándo no. Ábrelos si tienes dudas de una carpeta en concreto.
-	3. Lee "_COMO_ESCALAR" cuando el proyecto empiece a crecer.
+	IF YOU ONLY HAVE 5 MINUTES
+	1. Look at the "Services", "Controllers", and "ECS/Systems" folders: that's
+	   where you'll be writing code every day.
+	2. Every important folder has its own "_README" explaining when to use it
+	   and when not to. Open them if you have doubts about a specific folder.
+	3. Read "_COMO_ESCALAR" once the project starts growing.
 
-	Este archivo no hace nada, es solo texto. No lo requieras (require) desde tu código.
+	This file does nothing, it's just text. Do not require() it from your code.
 ]]
 
 return nil
@@ -96,45 +96,45 @@ local RS_FrameworkComoEscalar = make("ModuleScript", "_COMO_ESCALAR", RS_Framewo
 setSource(RS_FrameworkComoEscalar, [==[
 --!strict
 --[[
-	CÓMO ESCALAR CON ESTE FRAMEWORK
+	HOW TO SCALE WITH THIS FRAMEWORK
 
-	Esto no es teoría, son recomendaciones prácticas según tu situación.
-	Recuerda: nada de esto es obligatorio, son solo sugerencias.
+	This isn't theory, these are practical recommendations depending on your situation.
+	Remember: none of this is mandatory, it's all just suggestions.
 
-	SI TU JUEGO TIENE POCOS SISTEMAS (un prototipo, un jam, un juego pequeño)
-	  - No uses ECS. Usa Services y Controllers normales, o ni eso: un par de
-	    Scripts sueltos también es válido si el proyecto es pequeño.
-	  - No te compliques con Components/World, es más código del que necesitas.
+	IF YOUR GAME HAS FEW SYSTEMS (a prototype, a jam, a small game)
+	  - Don't use ECS. Use regular Services and Controllers, or not even that: a
+	    couple of loose Scripts is also valid if the project is small.
+	  - Don't bother with Components/World, it's more code than you need.
 
-	SI TU JUEGO TIENE CIENTOS DE SISTEMAS (muchos NPCs, objetos, mecánicas)
-	  - Ahí es donde ECS empieza a valer la pena: World + Systems te evita
-	    tener un Service gigante con "if enemy then ... elseif npc then ...".
-	  - Usa TagBridge + CollectionService para no tener que registrar cada
-	    instancia a mano (ver "_TAGS_Y_COLLECTIONSERVICE" dentro de Shared/ECS).
+	IF YOUR GAME HAS HUNDREDS OF SYSTEMS (many NPCs, objects, mechanics)
+	  - That's where ECS starts paying off: World + Systems saves you from
+	    having one giant Service with "if enemy then ... elseif npc then ...".
+	  - Use TagBridge + CollectionService so you don't have to manually register
+	    each instance (see "_TAGS_Y_COLLECTIONSERVICE" inside Shared/ECS).
 
-	SI TRABAJAS SOLO
-	  - Prioriza lo que entiendas rápido en 6 meses, no lo "más correcto".
-	    Menos carpetas, menos capas. Un par de Services grandes está bien.
+	IF YOU WORK ALONE
+	  - Prioritize what you'll understand quickly in 6 months, not what's
+	    "most correct." Fewer folders, fewer layers. A couple of big Services is fine.
 
-	SI TIENES UN EQUIPO
-	  - Divide por Services/Controllers/Systems: cada persona puede tocar su
-	    propio ModuleScript sin pisar el trabajo de los demás.
-	  - Usa nombres de archivo claros (el nombre del ModuleScript ES el nombre
-	    del sistema, no hace falta buscar en el código para saber qué es qué).
+	IF YOU HAVE A TEAM
+	  - Split by Services/Controllers/Systems: each person can touch their
+	    own ModuleScript without stepping on anyone else's work.
+	  - Use clear file names (the ModuleScript's name IS the system's name,
+	    no need to dig through code to know what's what).
 
-	SI CONTRATAS UN SCRIPTER O ALGUIEN NUEVO SE UNE
-	  - Mándale directo a este "_README" de la carpeta Framework.
-	  - Todo se explica solo con abrir el Explorer, no hace falta documentación
-	    externa ni un Notion con 40 páginas.
+	IF YOU HIRE A SCRIPTER OR SOMEONE NEW JOINS
+	  - Send them straight to this "_README" in the Framework folder.
+	  - Everything explains itself just by opening the Explorer, no need for
+	    external documentation or a 40-page Notion doc.
 
-	SI USAS COLLECTIONSERVICE (tags en Studio)
-	  - Ver "_TAGS_Y_COLLECTIONSERVICE" en Shared/ECS. Resumen: tags + TagBridge
-	    para cosas que se repiten mucho (enemigos, puertas, objetos recogibles).
-	    Para cosas únicas (un jefe final, un menú) no hace falta, usa un Service normal.
+	IF YOU USE COLLECTIONSERVICE (tags in Studio)
+	  - See "_TAGS_Y_COLLECTIONSERVICE" in Shared/ECS. Summary: tags + TagBridge
+	    for things that repeat a lot (enemies, doors, pickups). For unique
+	    things (a final boss, a menu) it's not needed, use a regular Service.
 
-	REGLA GENERAL PARA DECIDIR SI AÑADIR ALGO
-	Pregúntate: "¿esto hace que termine mi juego antes?". Si la respuesta es no,
-	no lo añadas todavía. Puedes crecer poco a poco, el framework no te lo impide.
+	GENERAL RULE FOR DECIDING WHETHER TO ADD SOMETHING
+	Ask yourself: "does this get my game finished sooner?" If the answer is no,
+	don't add it yet. You can grow little by little, the framework doesn't stop you.
 ]]
 
 return nil
@@ -144,41 +144,41 @@ local RS_FrameworkModulosPortables = make("ModuleScript", "_MODULOS_PORTABLES", 
 setSource(RS_FrameworkModulosPortables, [==[
 --!strict
 --[[
-	MÓDULOS PORTABLES — qué te puedes llevar a otro proyecto
+	PORTABLE MODULES — what you can take to another project
 
-	Copia solo lo que necesites. Esta lista te dice qué depende de qué.
+	Copy only what you need. This list tells you what depends on what.
 
 	✅ Shared/Signal
-	   100% independiente. Cópialo y pégalo en cualquier proyecto de Roblox.
+	   100% independent. Copy and paste it into any Roblox project.
 
 	✅ Shared/Net
-	   100% independiente (solo depende de servicios propios de Roblox:
-	   ReplicatedStorage, RunService, Players). Cópialo tal cual.
+	   100% independent (only depends on built-in Roblox services:
+	   ReplicatedStorage, RunService, Players). Copy it as-is.
 
 	✅ Shared/Boot/ModuleRegistry
-	   100% independiente. Es un cargador genérico de ModuleScripts, no sabe
-	   nada de Services ni de este framework en particular.
+	   100% independent. It's a generic ModuleScript loader, it doesn't know
+	   anything about Services or this particular framework.
 
 	⚠ Shared/ECS (Component, System, World, SystemRegistry, TagBridge)
-	   Portable como conjunto, pero los 5 archivos dependen entre sí
-	   (World necesita Component, SystemRegistry necesita System y World,
-	   TagBridge necesita World). Cópialos TODOS juntos o ninguno.
-	   No dependen de Services/Controllers, así que puedes usar ECS sin
-	   tocar el resto del framework.
+	   Portable as a set, but these 5 files depend on each other
+	   (World needs Component, SystemRegistry needs System and World,
+	   TagBridge needs World). Copy ALL of them together or none.
+	   They don't depend on Services/Controllers, so you can use ECS without
+	   touching the rest of the framework.
 
 	⚠ Types
-	   Portable, pero no aporta nada por sí solo: son solo anotaciones de tipos
-	   pensadas para Services/Controllers. Si no usas esas carpetas, no lo necesitas.
+	   Portable, but doesn't do anything on its own: it's just type annotations
+	   meant for Services/Controllers. If you don't use those folders, you don't need it.
 
-	❌ Boot/Loader (servidor y cliente), Bootstrap, SystemBootstrap
-	   Estos SÍ están atados a la estructura de carpetas de este framework
-	   en concreto (buscan una carpeta "Services"/"Controllers"/"Systems" al
-	   lado suyo). Puedes copiarlos, pero tendrás que recrear esa misma
-	   estructura de carpetas en el proyecto destino.
+	❌ Boot/Loader (server and client), Bootstrap, SystemBootstrap
+	   These ARE tied to this specific framework's folder structure
+	   (they look for a "Services"/"Controllers"/"Systems" folder right
+	   next to them). You can copy them, but you'll have to recreate that
+	   same folder structure in the destination project.
 
-	En resumen: si solo quieres un par de utilidades sueltas, quédate con
-	Signal, Net y ModuleRegistry. Si quieres el sistema completo de
-	Services/Controllers o el ECS, cópialos como bloque completo.
+	In short: if you only want a couple of loose utilities, stick with
+	Signal, Net, and ModuleRegistry. If you want the full Services/Controllers
+	system or the ECS, copy them as a complete block.
 ]]
 
 return nil
@@ -188,41 +188,41 @@ local RS_FrameworkIndice = make("ModuleScript", "_INDICE", RS_Framework)
 setSource(RS_FrameworkIndice, [==[
 --!strict
 --[[
-	ÍNDICE — EMPIEZA AQUÍ
+	INDEX — START HERE
 
-	Esto es un mapa, no una explicación. Cada pregunta de abajo te dice
-	a qué README ir a buscar el detalle. Aquí no se repite nada, solo
-	se te señala la puerta correcta.
+	This is a map, not an explanation. Each question below tells you
+	which README to check for details. Nothing is repeated here, it just
+	points you to the right door.
 
-	¿POR DÓNDE EMPIEZO?
-	  -> Framework/_README (aquí al lado). Tiene el mapa completo de
-	     carpetas y cómo se carga todo.
+	WHERE DO I START?
+	  -> Framework/_README (right here). Has the full map of
+	     folders and how everything loads.
 
-	¿DÓNDE CREO UN SERVICE?
-	  -> ServerScriptService/Framework/Services (su _README está ahí dentro).
+	WHERE DO I CREATE A SERVICE?
+	  -> ServerScriptService/Framework/Services (its _README is right in there).
 
-	¿DÓNDE CREO UN CONTROLLER?
-	  -> StarterPlayerScripts/Framework/Controllers (su _README está ahí dentro).
+	WHERE DO I CREATE A CONTROLLER?
+	  -> StarterPlayerScripts/Framework/Controllers (its _README is right in there).
 
-	¿QUIERO USAR ECS?
-	  -> Shared/ECS/_README. Si vas a usar tags de CollectionService,
-	     ver también Shared/ECS/_TAGS_Y_COLLECTIONSERVICE.
+	I WANT TO USE ECS?
+	  -> Shared/ECS/_README. If you're going to use CollectionService tags,
+	     also see Shared/ECS/_TAGS_Y_COLLECTIONSERVICE.
 
-	¿QUIERO USAR SIGNAL?
-	  -> Shared/Signal (el comentario está al inicio del propio módulo).
+	I WANT TO USE SIGNAL?
+	  -> Shared/Signal (the comment is at the top of the module itself).
 
-	¿QUIERO COMUNICAR CLIENTE Y SERVIDOR?
-	  -> Shared/Net (el comentario está al inicio del propio módulo).
+	I WANT TO COMMUNICATE CLIENT AND SERVER?
+	  -> Shared/Net (the comment is at the top of the module itself).
 
-	¿QUÉ MÓDULOS SON OPCIONALES?
-	  -> Todos, sin excepción. Ver Framework/_README, sección "REGLA DE ORO".
+	WHICH MODULES ARE OPTIONAL?
+	  -> All of them, no exceptions. See Framework/_README, "GOLDEN RULE" section.
 
-	¿QUÉ MÓDULOS SON PORTABLES?
+	WHICH MODULES ARE PORTABLE?
 	  -> Framework/_MODULOS_PORTABLES.
 
-	RECUERDA
-	Nada de esto es obligatorio. Usa solo lo que te sirva, ignora el resto.
-	El framework se adapta a ti, no al revés.
+	REMEMBER
+	None of this is mandatory. Use only what's useful to you, ignore the rest.
+	The framework adapts to you, not the other way around.
 ]]
 
 return nil
@@ -233,12 +233,12 @@ setSource(TypesModule, [==[
 --!strict
 --[[
 	TYPES
-	Qué es: los tipos "Service" y "Controller" que usan los módulos de este framework.
-	Por qué existe: para tener autocompletado y avisos del editor (Luau strict).
-	Cuándo usarlo: si quieres tipar tus propios Services/Controllers, hazles
-	               `local MiServicio: Service = { Name = "MiServicio" }` (opcional).
-	Cuándo NO usarlo: no valida nada en tiempo de ejecución. Si no te interesa
-	                  tipar nada, ignora este archivo por completo, no rompe nada.
+	What it is: the "Service" and "Controller" types used by this framework's modules.
+	Why it exists: to get editor autocomplete and warnings (Luau strict).
+	When to use it: if you want to type your own Services/Controllers, do
+	               `local MyService: Service = { Name = "MyService" }` (optional).
+	When NOT to use it: it doesn't validate anything at runtime. If you don't
+	                  care about typing anything, ignore this file entirely, it breaks nothing.
 ]]
 
 export type Service = {
@@ -264,33 +264,32 @@ local SharedReadme = make("ModuleScript", "_README", Shared)
 setSource(SharedReadme, [==[
 --!strict
 --[[
-	SHARED — carpeta explicada
+	SHARED — folder explained
 
-	PARA QUÉ SIRVE
-	Todo lo que vive aquí lo puede usar tanto el servidor como el cliente
-	(porque está en ReplicatedStorage). Es donde van las herramientas
-	genéricas, no la lógica concreta de tu juego.
+	WHAT IT'S FOR
+	Everything that lives here can be used by both server and client
+	(because it's in ReplicatedStorage). This is where generic tools go,
+	not your game's specific logic.
 
-	QUÉ HAY DENTRO
-	  Signal   -> eventos internos de Lua (no cruza servidor-cliente).
-	  Net      -> comunicación real entre servidor y cliente (RemoteEvents/Functions).
-	  Boot     -> el motor genérico que usan los Loaders para cargar módulos.
-	  ECS      -> Entidades-Componentes, opcional, ver su propio _README.
+	WHAT'S INSIDE
+	  Signal   -> internal Lua events (doesn't cross server-client).
+	  Net      -> actual server-client communication (RemoteEvents/Functions).
+	  Boot     -> the generic engine used by the Loaders to load modules.
+	  ECS      -> Entity-Component, optional, see its own _README.
 
-	CUÁNDO USARLA
-	Cuando tengas código que necesiten TANTO el servidor como el cliente
-	(tipos, utilidades, constantes, el propio Signal/Net).
+	WHEN TO USE IT
+	When you have code that BOTH server and client need (types,
+	utilities, constants, Signal/Net themselves).
 
-	CUÁNDO NO USARLA
-	Si algo es 100% exclusivo del servidor (por ejemplo, validar compras)
-	o 100% exclusivo del cliente (por ejemplo, un efecto visual), ponlo en
-	Services o Controllers en vez de aquí. Shared es SOLO para lo que de
-	verdad se comparte.
+	WHEN NOT TO USE IT
+	If something is 100% server-only (e.g. validating purchases)
+	or 100% client-only (e.g. a visual effect), put it in Services or
+	Controllers instead of here. Shared is ONLY for what's truly shared.
 
-	¿ES OBLIGATORIA?
-	Sí, en el sentido de que el propio Loader la usa (Boot/ModuleRegistry).
-	Pero puedes no usar Signal, Net o ECS si no los necesitas: cada uno
-	funciona de forma independiente.
+	IS IT MANDATORY?
+	Yes, in the sense that the Loader itself uses it (Boot/ModuleRegistry).
+	But you can skip Signal, Net, or ECS if you don't need them: each one
+	works independently.
 ]]
 
 return nil
@@ -301,23 +300,23 @@ setSource(SignalModule, [==[
 --!strict
 --[[
 	SIGNAL
-	Qué es: un evento simple, al estilo BindableEvent pero sin overhead de Instance.
-	Por qué existe: para comunicar módulos de Lua entre sí (mismo lado: solo
-	                servidor o solo cliente). NO cruza la frontera cliente-servidor,
-	                para eso usa Net.
-	Cuándo usarlo: cuando un Service/Controller/System necesita avisar a otros
-	               de que "algo pasó" sin acoplarse directamente a ellos.
-	Cuándo NO usarlo: para hablar entre servidor y cliente (usa Net) o si con
-	                  una simple llamada a función te alcanza (no todo necesita
-	                  ser un evento).
-	Ejemplo de uso:
+	What it is: a simple event, BindableEvent-style but without Instance overhead.
+	Why it exists: to communicate Lua modules with each other (same side: server-only
+	                or client-only). It does NOT cross the client-server boundary,
+	                use Net for that.
+	When to use it: when a Service/Controller/System needs to notify others
+	               that "something happened" without directly coupling to them.
+	When NOT to use it: to talk between server and client (use Net) or if a
+	                  simple function call is enough (not everything needs
+	                  to be an event).
+	Usage example:
 		local Signal = require(...)
 		local onScoreChanged = Signal.new()
 		onScoreChanged:Connect(function(newScore) print(newScore) end)
 		onScoreChanged:Fire(10)
-	Errores comunes:
-		- Olvidar Disconnect() en Signals de larga vida -> fugas de memoria.
-		- Usar Signal para comunicar servidor-cliente (no funciona, usa Net).
+	Common mistakes:
+		- Forgetting Disconnect() on long-lived Signals -> memory leaks.
+		- Using Signal to communicate server-client (doesn't work, use Net).
 ]]
 
 export type Connection = {
@@ -452,24 +451,24 @@ setSource(NetModule, [==[
 --!strict
 --[[
 	NET
-	Qué es: una capa fina sobre RemoteEvents/RemoteFunctions.
-	Por qué existe: para no tener que crear e ir a buscar RemoteEvents a mano
-	                en el Explorer. Net los crea y los cachea por ti, con un nombre.
-	Cuándo usarlo: cualquier comunicación real entre servidor y cliente
-	               (posiciones, acciones del jugador, resultados del servidor).
-	Cuándo NO usarlo: para comunicar dos módulos del MISMO lado (servidor-servidor
-	                  o cliente-cliente), usa Signal, es más barato.
-	Ejemplo de uso:
-		-- Servidor
+	What it is: a thin layer over RemoteEvents/RemoteFunctions.
+	Why it exists: so you don't have to manually create and hunt down RemoteEvents
+	                in the Explorer. Net creates them and caches them for you, by name.
+	When to use it: any real communication between server and client
+	               (positions, player actions, server results).
+	When NOT to use it: to communicate two modules on the SAME side (server-server
+	                  or client-client), use Signal, it's cheaper.
+	Usage example:
+		-- Server
 		local damageEvent = Net.Event("PlayerDamaged")
 		damageEvent:FireClient(player, 10)
-		-- Cliente
+		-- Client
 		local damageEvent = Net.Event("PlayerDamaged")
 		damageEvent:Connect(function(amount) print(amount) end)
-	Errores comunes:
-		- Usar el mismo nombre de string para dos eventos distintos (colisión).
-		- Llamar FireClient desde el cliente, o Fire desde el servidor
-		  (cada método tiene un lado correcto, revisa los asserts si te falla).
+	Common mistakes:
+		- Using the same string name for two different events (collision).
+		- Calling FireClient from the client, or Fire from the server
+		  (each method has a correct side, check the asserts if it fails).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -543,22 +542,22 @@ local NetEvent = {}
 NetEvent.__index = NetEvent
 
 function NetEvent:Fire(...: any)
-	assert(not IS_SERVER, "Net: Fire solo se llama del cliente, usa FireClient/FireAllClients en el servidor")
+	assert(not IS_SERVER, "Net: Fire is only called from the client, use FireClient/FireAllClients on the server")
 	self._remote:FireServer(...)
 end
 
 function NetEvent:FireClient(player: Player, ...: any)
-	assert(IS_SERVER, "Net: FireClient solo se llama del servidor")
+	assert(IS_SERVER, "Net: FireClient is only called from the server")
 	self._remote:FireClient(player, ...)
 end
 
 function NetEvent:FireAllClients(...: any)
-	assert(IS_SERVER, "Net: FireAllClients solo se llama del servidor")
+	assert(IS_SERVER, "Net: FireAllClients is only called from the server")
 	self._remote:FireAllClients(...)
 end
 
 function NetEvent:FireOtherClients(exclude: Player, ...: any)
-	assert(IS_SERVER, "Net: FireOtherClients solo se llama del servidor")
+	assert(IS_SERVER, "Net: FireOtherClients is only called from the server")
 	for _, player in Players:GetPlayers() do
 		if player ~= exclude then
 			self._remote:FireClient(player, ...)
@@ -584,12 +583,12 @@ local NetFunction = {}
 NetFunction.__index = NetFunction
 
 function NetFunction:Invoke(...: any): ...any
-	assert(not IS_SERVER, "Net: Invoke solo se llama del cliente")
+	assert(not IS_SERVER, "Net: Invoke is only called from the client")
 	return self._remote:InvokeServer(...)
 end
 
 function NetFunction:SetCallback(callback: (player: Player, ...any) -> ...any)
-	assert(IS_SERVER, "Net: SetCallback solo se llama del servidor")
+	assert(IS_SERVER, "Net: SetCallback is only called from the server")
 	self._remote.OnServerInvoke = callback
 end
 
@@ -635,21 +634,21 @@ setSource(ModuleRegistryModule, [==[
 --!strict
 --[[
 	MODULE REGISTRY
-	Qué es: un cargador genérico de ModuleScripts. No sabe nada de "Services" ni
-	        "Controllers", solo sabe hacer require() de una carpeta y llamar
-	        Init/Start si existen.
-	Por qué existe: para no repetir la misma lógica de carga en el Loader del
-	                servidor y en el del cliente.
-	Cuándo usarlo: lo usan internamente Boot/Loader (servidor) y Boot/Loader
-	               (cliente). No necesitas tocarlo directamente casi nunca.
-	Cuándo NO usarlo: si quieres controlar tú mismo el orden exacto de carga de
-	                  2 o 3 módulos concretos, simplemente haz require() manual
-	                  en tu Bootstrap, no hace falta pasar por aquí.
-	Convención: cualquier ModuleScript de la carpeta que empiece con "_" se
-	            ignora (sirve para documentación o para desactivar un módulo).
-	Errores comunes:
-		- Un módulo que no termina en "return AlgunaTabla" -> se avisa por warn
-		  y se ignora, no rompe la carga del resto.
+	What it is: a generic ModuleScript loader. It doesn't know anything about
+	        "Services" or "Controllers", it only knows how to require() a
+	        folder and call Init/Start if they exist.
+	Why it exists: to avoid repeating the same loading logic in the server
+	                Loader and the client Loader.
+	When to use it: it's used internally by Boot/Loader (server) and Boot/Loader
+	               (client). You almost never need to touch it directly.
+	When NOT to use it: if you want to control the exact load order of 2 or 3
+	                  specific modules yourself, just do a manual require()
+	                  in your Bootstrap, no need to go through here.
+	Convention: any ModuleScript in the folder starting with "_" is
+	            ignored (used for documentation or to disable a module).
+	Common mistakes:
+		- A module that doesn't end with "return SomeTable" -> a warning is
+		  issued and it's ignored, it doesn't break the rest of the load.
 ]]
 
 export type Loadable = {
@@ -697,8 +696,8 @@ end
 function Registry.AddFolder(self: Registry, folder: Instance, deep: boolean?)
 	local children = if deep then folder:GetDescendants() else folder:GetChildren()
 	for _, child in children do
-		-- Los nombres que empiezan con "_" son documentación o módulos
-		-- desactivados a propósito: nunca se cargan.
+		-- Names starting with "_" are documentation or disabled
+		-- modules: they are never loaded.
 		if child:IsA("ModuleScript") and child.Name:sub(1, 1) ~= "_" then
 			Registry.Add(self, child)
 		end
@@ -711,12 +710,12 @@ function Registry.Start(self: Registry)
 	for _, moduleScript in internal._pending do
 		local ok, result = pcall(require, moduleScript)
 		if not ok then
-			warn(`Framework: fallo al cargar {internal._label} {moduleScript.Name}: {result}`)
+			warn(`Framework: failed to load {internal._label} {moduleScript.Name}: {result}`)
 			continue
 		end
 		if typeof(result) ~= "table" then
 			warn(
-				`Framework: {moduleScript.Name} no devolvió una tabla (¿olvidaste el "return" al final del archivo?). Se ignorará este módulo.`
+				`Framework: {moduleScript.Name} did not return a table (did you forget the "return" at the end of the file?). This module will be ignored.`
 			)
 			continue
 		end
@@ -727,7 +726,7 @@ function Registry.Start(self: Registry)
 		if loadable.Init then
 			local ok, err = pcall(loadable.Init, loadable)
 			if not ok then
-				warn(`Framework: fallo en Init de {name}: {err}`)
+				warn(`Framework: failure in Init of {name}: {err}`)
 			end
 		end
 	end
@@ -737,7 +736,7 @@ function Registry.Start(self: Registry)
 			task.spawn(function()
 				local ok, err = pcall(loadable.Start, loadable)
 				if not ok then
-					warn(`Framework: fallo en Start de {name}: {err}`)
+					warn(`Framework: failure in Start of {name}: {err}`)
 				end
 			end)
 		end
@@ -747,7 +746,7 @@ function Registry.Start(self: Registry)
 	for _ in internal._loaded do
 		count += 1
 	end
-	print(`Framework: {count} {internal._label}(s) cargados correctamente.`)
+	print(`Framework: {count} {internal._label}(s) loaded successfully.`)
 end
 
 return Registry
@@ -759,37 +758,37 @@ local SharedECSReadme = make("ModuleScript", "_README", SharedECS)
 setSource(SharedECSReadme, [==[
 --!strict
 --[[
-	ECS (Entity-Component-System) — carpeta explicada
+	ECS (Entity-Component-System) — folder explained
 
-	PARA QUÉ SIRVE
-	Una forma alternativa (y 100% opcional) de organizar lógica que se repite
-	en muchas instancias parecidas: enemigos, objetos recogibles, puertas, etc.
-	En vez de un Service enorme con muchos "if", divides el comportamiento en
-	Systems pequeños que operan sobre cualquier entidad que tenga ciertos
+	WHAT IT'S FOR
+	An alternative (and 100% optional) way to organize logic that repeats
+	across many similar instances: enemies, pickups, doors, etc.
+	Instead of one giant Service with lots of "if"s, you split behavior into
+	small Systems that operate on any entity that has certain
 	Components.
 
-	QUÉ HAY DENTRO
-	  Component      -> define "etiquetas de datos" (ej: Health, Position).
-	  World          -> guarda qué entidad tiene qué componente y sus datos.
-	  System         -> el tipo de un System (Init/Update).
-	  SystemRegistry -> carga y ordena tus Systems (lo usan los SystemBootstrap).
-	  TagBridge      -> conecta CollectionService con el World automáticamente.
+	WHAT'S INSIDE
+	  Component      -> defines "data tags" (e.g. Health, Position).
+	  World          -> stores which entity has which component and its data.
+	  System         -> the type of a System (Init/Update).
+	  SystemRegistry -> loads and orders your Systems (used by SystemBootstrap).
+	  TagBridge      -> connects CollectionService to the World automatically.
 
-	CUÁNDO USARLA
-	Cuando tengas MUCHAS instancias parecidas con comportamiento compartido
-	(decenas o cientos de enemigos, proyectiles, recolectables...).
+	WHEN TO USE IT
+	When you have MANY similar instances with shared behavior
+	(dozens or hundreds of enemies, projectiles, pickups...).
 
-	CUÁNDO NO USARLA
-	Si tu juego tiene pocos sistemas, o cosas mayormente únicas (un jefe, un
-	menú, una tienda), un Service/Controller normal es más simple y más
-	rápido de escribir. ECS añade una capa de indirección que solo vale la
-	pena cuando hay repetición real.
+	WHEN NOT TO USE IT
+	If your game has few systems, or mostly unique things (a boss, a
+	menu, a shop), a regular Service/Controller is simpler and
+	faster to write. ECS adds a layer of indirection that only pays
+	off when there's real repetition.
 
-	¿ES OBLIGATORIA?
-	No. Puedes borrar toda esta carpeta y el resto del framework (Services,
-	Controllers, Signal, Net) sigue funcionando exactamente igual.
+	IS IT MANDATORY?
+	No. You can delete this whole folder and the rest of the framework
+	(Services, Controllers, Signal, Net) keeps working exactly the same.
 
-	Ver también "_TAGS_Y_COLLECTIONSERVICE" en esta misma carpeta.
+	See also "_TAGS_Y_COLLECTIONSERVICE" in this same folder.
 ]]
 
 return nil
@@ -799,27 +798,27 @@ local SharedECSTagsDoc = make("ModuleScript", "_TAGS_Y_COLLECTIONSERVICE", Share
 setSource(SharedECSTagsDoc, [==[
 --!strict
 --[[
-	TAGS + COLLECTIONSERVICE — cómo organizar tus Systems con etiquetas
+	TAGS + COLLECTIONSERVICE — how to organize your Systems with tags
 
-	POR QUÉ USAR TAGS
-	CollectionService te deja poner una "etiqueta" (tag) a cualquier Instance
-	desde el propio Studio, sin escribir código. TagBridge escucha esas
-	etiquetas y crea/destruye entidades del World automáticamente cuando
-	añades o quitas el tag, incluso en runtime.
+	WHY USE TAGS
+	CollectionService lets you put a "tag" on any Instance directly from
+	Studio, without writing code. TagBridge listens for those
+	tags and automatically creates/destroys World entities when you
+	add or remove the tag, even at runtime.
 
-	Sin esto, tendrías que ir registrando a mano cada enemigo/puerta/objeto
-	que colocas en el mapa. Con tags, simplemente les pones la etiqueta en
-	Studio (o vía código) y el framework se entera solo.
+	Without this, you'd have to manually register every enemy/door/object
+	you place on the map. With tags, you just add the tag in
+	Studio (or via code) and the framework figures it out on its own.
 
-	EJEMPLOS TÍPICOS DE TAGS
-	  "Enemy"         -> cualquier NPC hostil.
-	  "NPC"           -> personajes no hostiles con diálogo.
-	  "Door"          -> puertas que se abren/cierran.
-	  "Interactable"  -> cualquier cosa con la que el jugador puede interactuar (E).
-	  "Projectile"    -> balas/flechas que necesitan lógica de movimiento/daño.
-	  "Pickup"        -> objetos recogibles (monedas, items).
+	TYPICAL TAG EXAMPLES
+	  "Enemy"         -> any hostile NPC.
+	  "NPC"           -> non-hostile characters with dialogue.
+	  "Door"          -> doors that open/close.
+	  "Interactable"  -> anything the player can interact with (E).
+	  "Projectile"    -> bullets/arrows that need movement/damage logic.
+	  "Pickup"        -> collectible objects (coins, items).
 
-	CÓMO USARLO (ejemplo)
+	HOW TO USE IT (example)
 		local TagBridge = require(ReplicatedStorage.Framework.Shared.ECS.TagBridge)
 		local HealthComponent = require(path.to.HealthComponent)
 
@@ -827,17 +826,17 @@ setSource(SharedECSTagsDoc, [==[
 			world:Set(entity, HealthComponent, { current = 100, max = 100 })
 		end)
 
-	CUÁNDO MERECE LA PENA
-	  - Tienes muchas instancias del mismo tipo repartidas por el mapa.
-	  - Quieres que un diseñador de niveles (sin tocar código) pueda colocar
-	    un enemigo nuevo solo poniéndole el tag correcto.
+	WHEN IT'S WORTH IT
+	  - You have many instances of the same type scattered across the map.
+	  - You want a level designer (without touching code) to be able to
+	    place a new enemy just by adding the right tag.
 
-	CUÁNDO NO MERECE LA PENA
-	  - Tienes 1 o 2 instancias únicas (un jefe final, una puerta especial).
-	    En ese caso, referenciarlas directamente desde un Service es más
-	    simple y más directo de leer.
-	  - Tu juego no usa ECS: TagBridge depende de World, así que sin ECS no
-	    aplica (usa CollectionService directamente si lo necesitas igualmente).
+	WHEN IT'S NOT WORTH IT
+	  - You have 1 or 2 unique instances (a final boss, a special door).
+	    In that case, referencing them directly from a Service is
+	    simpler and more direct to read.
+	  - Your game doesn't use ECS: TagBridge depends on World, so without
+	    ECS this doesn't apply (use CollectionService directly if you still need it).
 ]]
 
 return nil
@@ -848,15 +847,15 @@ setSource(ComponentModule, [==[
 --!strict
 --[[
 	COMPONENT
-	Qué es: una "etiqueta de datos" tipada, usada para guardar información en
-	        el World (ej: Health, Position, Owner).
-	Por qué existe: para que World:Set/Get/Has sepan de qué tipo son los datos
-	                que estás guardando, con autocompletado incluido.
-	Cuándo usarlo: cuando definas un nuevo "tipo de dato" que varias entidades
-	               puedan tener (ej: HealthComponent = Component.new("Health")).
-	Cuándo NO usarlo: un Component no tiene comportamiento, solo datos. Si
-	                  necesitas lógica, esa va en un System, no aquí.
-	Ejemplo de uso:
+	What it is: a typed "data tag", used to store information in
+	        the World (e.g. Health, Position, Owner).
+	Why it exists: so World:Set/Get/Has know what type of data
+	                you're storing, with autocomplete included.
+	When to use it: when defining a new "data type" that several entities
+	               can have (e.g. HealthComponent = Component.new("Health")).
+	When NOT to use it: a Component has no behavior, only data. If you
+	                  need logic, that goes in a System, not here.
+	Usage example:
 		local HealthComponent = Component.new("Health") :: Component.ComponentDefinition<{current: number, max: number}>
 		world:Set(entity, HealthComponent, { current = 100, max = 100 })
 ]]
@@ -881,28 +880,28 @@ local SharedECSComponentsReadme = make("ModuleScript", "_README", SharedECSCompo
 setSource(SharedECSComponentsReadme, [==[
 --!strict
 --[[
-	COMPONENTS — carpeta explicada
+	COMPONENTS — folder explained
 
-	PARA QUÉ SIRVE
-	Guardar aquí tus definiciones de Component (creadas con Component.new),
-	una por ModuleScript, para que sea fácil encontrarlas y reusarlas desde
-	cualquier System.
+	WHAT IT'S FOR
+	Store your Component definitions here (created with Component.new),
+	one per ModuleScript, so they're easy to find and reuse from
+	any System.
 
-	CUÁNDO USARLA
-	Cuando uses ECS y necesites un nuevo tipo de dato compartido entre
-	entidades (Health, Position, Team, Owner, etc.).
+	WHEN TO USE IT
+	When using ECS and you need a new shared data type between
+	entities (Health, Position, Team, Owner, etc.).
 
-	CUÁNDO NO USARLA
-	Si no usas ECS, ignora esta carpeta por completo.
+	WHEN NOT TO USE IT
+	If you don't use ECS, ignore this folder entirely.
 
-	EJEMPLO
+	EXAMPLE
 		-- Components/Health.lua
 		local Component = require(script.Parent.Parent.Component)
 		export type HealthData = { current: number, max: number }
 		return Component.new("Health") :: Component.ComponentDefinition<HealthData>
 
-	¿ES OBLIGATORIA?
-	No, está vacía a propósito. Créala solo si de verdad usas ECS.
+	IS IT MANDATORY?
+	No, it's intentionally empty. Only create it if you actually use ECS.
 ]]
 
 return nil
@@ -912,14 +911,14 @@ local SystemTypeModule = make("ModuleScript", "System", SharedECS)
 setSource(SystemTypeModule, [==[
 --!strict
 --[[
-	SYSTEM (tipo)
-	Qué es: la forma que debe tener cualquier System (Name, Priority, Init, Update).
-	Por qué existe: para que SystemRegistry sepa qué esperar de cada System, y
-	                para que tengas autocompletado al escribir uno nuevo.
-	Cuándo usarlo: al escribir un módulo dentro de una carpeta "Systems",
-	               tipa tu tabla como Types.System.
-	Cuándo NO usarlo: si no usas ECS, ignóralo.
-	Ejemplo de uso:
+	SYSTEM (type)
+	What it is: the shape any System must have (Name, Priority, Init, Update).
+	Why it exists: so SystemRegistry knows what to expect from each System, and
+	                so you get autocomplete when writing a new one.
+	When to use it: when writing a module inside a "Systems" folder,
+	               type your table as Types.System.
+	When NOT to use it: if you don't use ECS, ignore it.
+	Usage example:
 		local MySystem: Types.System = { Name = "MySystem", Priority = 0 }
 		function MySystem:Update(world, dt) ... end
 		return MySystem
@@ -943,23 +942,23 @@ setSource(WorldModule, [==[
 --!strict
 --[[
 	WORLD
-	Qué es: el almacén central del ECS. Guarda qué entidades existen y qué
-	        Component/datos tiene cada una.
-	Por qué existe: para que los Systems puedan preguntar "dame todas las
-	                entidades que tengan Health y Position" sin saber cómo
-	                están guardadas internamente.
-	Cuándo usarlo: crea un World por lado (uno de servidor, uno de cliente;
-	               ya vienen creados en ECS/ServerWorld y ECS/ClientWorld).
-	Cuándo NO usarlo: si no usas ECS, ignóralo. Un World vacío no cuesta nada.
-	Ejemplo de uso:
+	What it is: the central store of the ECS. It keeps track of which
+	        entities exist and which Component/data each one has.
+	Why it exists: so Systems can ask "give me all the entities
+	                that have Health and Position" without knowing how
+	                they're stored internally.
+	When to use it: create one World per side (one for server, one for
+	               client; already created in ECS/ServerWorld and ECS/ClientWorld).
+	When NOT to use it: if you don't use ECS, ignore it. An empty World costs nothing.
+	Usage example:
 		local entity = world:CreateEntity()
 		world:Set(entity, HealthComponent, { current = 100, max = 100 })
 		for entity, health in world:Query(HealthComponent) do
 			print(entity, health.current)
 		end
-	Errores comunes:
-		- Usar World:Set en una entidad ya destruida -> falla el assert a propósito,
-		  revisa el orden de tu lógica.
+	Common mistakes:
+		- Using World:Set on an already destroyed entity -> the assert fails on
+		  purpose, check the order of your logic.
 ]]
 
 local Component = require(script.Parent.Component)
@@ -1046,7 +1045,7 @@ end
 
 function World:Set<T>(entity: Entity, component: ComponentDefinition<T>, data: T)
 	local internal = (self :: any) :: WorldInternal
-	assert(internal._alive[entity], "World: la entidad no existe o fue destruida")
+	assert(internal._alive[entity], "World: the entity does not exist or was destroyed")
 
 	local storage = internal._components[component]
 	if not storage then
@@ -1168,18 +1167,18 @@ setSource(SystemRegistryModule, [==[
 --!strict
 --[[
 	SYSTEM REGISTRY
-	Qué es: el cargador de Systems (equivalente a ModuleRegistry, pero para
-	        Systems: los ordena por Priority y los conecta a Heartbeat).
-	Por qué existe: para que no tengas que escribir a mano el bucle de
-	                Heartbeat ni el orden de ejecución de tus Systems.
-	Cuándo usarlo: lo usan internamente ECS/SystemLoader (servidor y cliente).
-	Cuándo NO usarlo: si prefieres controlar tú mismo cuándo se llama Update
-	                  de un System concreto, puedes ignorarlo y llamarlo manual.
-	Convención: los ModuleScripts que empiecen con "_" se ignoran (documentación
-	            o System desactivado a propósito).
-	Errores comunes:
-		- Un System sin campo "Name" (string) -> se avisa y se ignora, en vez
-		  de romper el orden de todos los demás.
+	What it is: the System loader (equivalent to ModuleRegistry, but for
+	        Systems: it orders them by Priority and connects them to Heartbeat).
+	Why it exists: so you don't have to write the Heartbeat loop or the
+	                execution order of your Systems by hand.
+	When to use it: used internally by ECS/SystemLoader (server and client).
+	When NOT to use it: if you'd rather control yourself when Update is
+	                  called for a specific System, you can ignore it and call it manually.
+	Convention: ModuleScripts starting with "_" are ignored (documentation
+	            or an intentionally disabled System).
+	Common mistakes:
+		- A System without a "Name" field (string) -> a warning is issued and
+		  it's ignored, instead of breaking the order of all the others.
 ]]
 
 local RunService = game:GetService("RunService")
@@ -1226,8 +1225,8 @@ end
 function Registry.AddFolder(self: Registry, folder: Instance, deep: boolean?)
 	local children = if deep then folder:GetDescendants() else folder:GetChildren()
 	for _, child in children do
-		-- Los nombres que empiezan con "_" son documentación o Systems
-		-- desactivados a propósito: nunca se cargan.
+		-- Names starting with "_" are documentation or intentionally
+		-- disabled Systems: they are never loaded.
 		if child:IsA("ModuleScript") and child.Name:sub(1, 1) ~= "_" then
 			Registry.Add(self, child)
 		end
@@ -1240,18 +1239,18 @@ function Registry.Start(self: Registry, world: World)
 	for _, moduleScript in internal._pending do
 		local ok, result = pcall(require, moduleScript)
 		if not ok then
-			warn(`Framework: fallo al cargar {internal._label} {moduleScript.Name}: {result}`)
+			warn(`Framework: failed to load {internal._label} {moduleScript.Name}: {result}`)
 			continue
 		end
 		if typeof(result) ~= "table" then
 			warn(
-				`Framework: {moduleScript.Name} no devolvió una tabla (¿olvidaste el "return" al final del archivo?). Se ignorará este System.`
+				`Framework: {moduleScript.Name} did not return a table (did you forget the "return" at the end of the file?). This System will be ignored.`
 			)
 			continue
 		end
 		local system = result :: Types.System
 		if typeof(system.Name) ~= "string" then
-			warn(`Framework: el System de {moduleScript.Name} no tiene un campo "Name" (string). Se ignorará.`)
+			warn(`Framework: the System in {moduleScript.Name} has no "Name" field (string). It will be ignored.`)
 			continue
 		end
 		table.insert(internal._loaded, system)
@@ -1270,19 +1269,19 @@ function Registry.Start(self: Registry, world: World)
 		if system.Init then
 			local ok, err = pcall(system.Init, system, world)
 			if not ok then
-				warn(`Framework: fallo en Init de {system.Name}: {err}`)
+				warn(`Framework: failure in Init of {system.Name}: {err}`)
 			end
 		end
 	end
 
-	print(`Framework: {#internal._loaded} {internal._label}(s) cargados correctamente.`)
+	print(`Framework: {#internal._loaded} {internal._label}(s) loaded successfully.`)
 
 	RunService.Heartbeat:Connect(function(deltaTime: number)
 		for _, system in internal._loaded do
 			if system.Update then
 				local ok, err = pcall(system.Update, system, world, deltaTime)
 				if not ok then
-					warn(`Framework: fallo en Update de {system.Name}: {err}`)
+					warn(`Framework: failure in Update of {system.Name}: {err}`)
 				end
 			end
 		end
@@ -1297,21 +1296,21 @@ setSource(TagBridgeModule, [==[
 --!strict
 --[[
 	TAG BRIDGE
-	Qué es: un puente entre CollectionService (tags puestos en Studio o por
-	        código) y el World del ECS. Crea una entidad automáticamente
-	        cuando aparece una instancia con el tag, y la destruye cuando
-	        el tag se quita o la instancia se destruye.
-	Por qué existe: para no tener que registrar a mano cada enemigo/puerta/
-	                objeto que hay en el mapa.
-	Cuándo usarlo: cuando uses ECS y tengas muchas instancias repetidas con
-	               el mismo tag (ver "_TAGS_Y_COLLECTIONSERVICE" en Shared/ECS).
-	Cuándo NO usarlo: para 1 o 2 instancias únicas, es más simple registrarlas
-	                  a mano o usar un Service normal.
-	Ejemplo de uso:
+	What it is: a bridge between CollectionService (tags placed in Studio or
+	        added by code) and the ECS World. It automatically creates an
+	        entity when an instance with the tag appears, and destroys it
+	        when the tag is removed or the instance is destroyed.
+	Why it exists: so you don't have to manually register every enemy/door/
+	                object that exists on the map.
+	When to use it: when you use ECS and have many repeated instances with
+	               the same tag (see "_TAGS_Y_COLLECTIONSERVICE" in Shared/ECS).
+	When NOT to use it: for 1 or 2 unique instances, it's simpler to register
+	                  them by hand or use a regular Service.
+	Usage example:
 		TagBridge.Register(world, "Enemy", function(world, entity, instance)
 			world:Set(entity, HealthComponent, { current = 100, max = 100 })
 		end, function(world, entity, instance)
-			print("Enemigo eliminado:", instance.Name)
+			print("Enemy removed:", instance.Name)
 		end)
 ]]
 
@@ -1373,19 +1372,19 @@ local SSS_FrameworkReadme = make("ModuleScript", "_README", SSS_Framework)
 setSource(SSS_FrameworkReadme, [==[
 --!strict
 --[[
-	FRAMEWORK (SERVIDOR) — carpeta explicada
+	FRAMEWORK (SERVER) — folder explained
 
-	QUÉ HAY DENTRO
-	  Boot/Loader   -> arranca automáticamente todo lo de "Services".
-	  Services/     -> AQUÍ VAN TUS SERVICIOS. Uno por ModuleScript.
-	  ECS/          -> World del servidor + arranque de Systems del servidor.
-	  ECS/Systems/  -> AQUÍ VAN TUS SYSTEMS DE SERVIDOR (si usas ECS).
+	WHAT'S INSIDE
+	  Boot/Loader   -> automatically starts everything in "Services".
+	  Services/     -> YOUR SERVICES GO HERE. One per ModuleScript.
+	  ECS/          -> server World + server Systems bootstrap.
+	  ECS/Systems/  -> YOUR SERVER SYSTEMS GO HERE (if you use ECS).
 
-	NO HAY NADA OBLIGATORIO
-	Si no usas ECS, borra la carpeta ECS entera: Services sigue funcionando.
-	Si no usas Services, borra Boot y Services: nada más depende de eso.
+	NOTHING IS MANDATORY
+	If you don't use ECS, delete the whole ECS folder: Services keeps working.
+	If you don't use Services, delete Boot and Services: nothing else depends on that.
 
-	Ver Services/_README y ECS/Systems/_README para más detalle de cada una.
+	See Services/_README and ECS/Systems/_README for more detail on each.
 ]]
 
 return nil
@@ -1397,19 +1396,19 @@ local ServerLoaderModule = make("ModuleScript", "Loader", SSS_Boot)
 setSource(ServerLoaderModule, [==[
 --!strict
 --[[
-	LOADER (servidor)
-	Qué es: arranca los Services. Al llamar Loader.Start(), busca la carpeta
-	        "Services" que está al lado (ServerScriptService/Framework/Services)
-	        y hace require() de cada ModuleScript de ahí.
-	Por qué existe: para que solo tengas que escribir tu Service y olvidarte
-	                de conectarlo a nada, se conecta solo.
-	Cuándo usarlo: ya está conectado por Bootstrap, no necesitas llamarlo tú.
-	               Solo usa Loader.AddServices(folder) si quieres cargar
-	               Services desde OTRA carpeta además de la de por defecto.
-	Cuándo NO usarlo: si prefieres requerir tus Services a mano uno por uno
-	                  (por ejemplo para controlar el orden exacto), puedes
-	                  ignorar este Loader y hacer require() tú mismo desde
-	                  otro Script.
+	LOADER (server)
+	What it is: starts the Services. When you call Loader.Start(), it looks
+	        for the "Services" folder next to it (ServerScriptService/Framework/Services)
+	        and does require() on every ModuleScript there.
+	Why it exists: so you only have to write your Service and forget about
+	                connecting it to anything, it connects itself.
+	When to use it: already connected by Bootstrap, you don't need to call it
+	               yourself. Only use Loader.AddServices(folder) if you want
+	               to load Services from ANOTHER folder besides the default one.
+	When NOT to use it: if you'd rather require your Services by hand one by
+	                  one (for example to control the exact order), you can
+	                  ignore this Loader and do require() yourself from
+	                  another Script.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1450,10 +1449,10 @@ return Loader
 local ServerBootstrapScript = make("Script", "Bootstrap", SSS_Boot)
 setSource(ServerBootstrapScript, [==[
 --!strict
--- BOOTSTRAP (servidor)
--- Este Script normal y corriente es el único punto de entrada real.
--- Su único trabajo es arrancar el Loader, que a su vez carga tus Services.
--- Si algún día quieres cambiar CÓMO se arranca todo, este es el archivo a tocar.
+-- BOOTSTRAP (server)
+-- This regular Script is the single real entry point.
+-- Its only job is to start the Loader, which in turn loads your Services.
+-- If you ever want to change HOW everything starts, this is the file to touch.
 
 local Loader = require(script.Parent.Loader)
 
@@ -1465,27 +1464,27 @@ local SSS_ServicesReadme = make("ModuleScript", "_README", SSS_Services)
 setSource(SSS_ServicesReadme, [==[
 --!strict
 --[[
-	SERVICES — carpeta explicada
+	SERVICES — folder explained
 
-	PARA QUÉ SIRVE
-	Cada ModuleScript de esta carpeta es un "Service": un módulo de servidor
-	con Init (se llama una vez al arrancar todos) y Start (se llama después,
-	en su propio hilo). Se cargan y arrancan solos, no tienes que registrarlos
-	en ningún lado.
+	WHAT IT'S FOR
+	Every ModuleScript in this folder is a "Service": a server module
+	with Init (called once when everything starts) and Start (called after,
+	on its own thread). They load and start themselves, you don't have to
+	register them anywhere.
 
-	CUÁNDO USARLA
-	Para cualquier lógica de servidor que quieras organizada en un módulo con
-	nombre propio: economía, guardado de datos, spawns, matchmaking, etc.
+	WHEN TO USE IT
+	For any server logic you want organized into a named module:
+	economy, data saving, spawns, matchmaking, etc.
 
-	CUÁNDO NO USARLA
-	Si es un script único y pequeño que no necesita Init/Start (por ejemplo,
-	un script de configuración que corre una vez), un Script normal en otro
-	lado también es válido. No fuerces todo a ser un Service.
+	WHEN NOT TO USE IT
+	If it's a small, one-off script that doesn't need Init/Start (for example,
+	a configuration script that runs once), a regular Script somewhere else
+	is also valid. Don't force everything to be a Service.
 
-	¿ES OBLIGATORIA?
-	No. Puedes vaciar esta carpeta y usar Scripts normales si lo prefieres.
+	IS IT MANDATORY?
+	No. You can empty this folder and use regular Scripts if you prefer.
 
-	EJEMPLO REAL
+	REAL EXAMPLE
 		-- Services/CoinService.lua
 		local CoinService = { Name = "CoinService" }
 
@@ -1501,9 +1500,9 @@ setSource(SSS_ServicesReadme, [==[
 
 		return CoinService
 
-	ERROR COMÚN
-	Olvidar el "return CoinService" al final: el Loader avisará por warn en
-	vez de fallar en silencio.
+	COMMON MISTAKE
+	Forgetting the "return CoinService" at the end: the Loader will warn
+	instead of failing silently.
 ]]
 
 return nil
@@ -1516,13 +1515,13 @@ setSource(ServerWorldModule, [==[
 --!strict
 --[[
 	SERVER WORLD
-	Qué es: el World (ECS) del lado del servidor. Un World nuevo, vacío,
-	        listo para que tus Systems de servidor guarden entidades en él.
-	Por qué existe: para que todos los Systems de servidor compartan el
-	                mismo World sin tener que pasarlo a mano por todos lados.
-	Cuándo usarlo: require(script.Parent.ServerWorld) desde cualquier System
-	               de servidor (o desde un Service, si necesita leer el World).
-	Cuándo NO usarlo: si no usas ECS en el servidor, ignora este archivo.
+	What it is: the (ECS) World on the server side. A new, empty World,
+	        ready for your server Systems to store entities in it.
+	Why it exists: so all server Systems share the
+	                same World without having to pass it around manually.
+	When to use it: require(script.Parent.ServerWorld) from any server
+	               System (or from a Service, if it needs to read the World).
+	When NOT to use it: if you don't use ECS on the server, ignore this file.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1535,15 +1534,15 @@ local ServerSystemLoaderModule = make("ModuleScript", "SystemLoader", ServerECS)
 setSource(ServerSystemLoaderModule, [==[
 --!strict
 --[[
-	SYSTEM LOADER (servidor)
-	Qué es: el equivalente a Boot/Loader pero para Systems de ECS del servidor.
-	Por qué existe: arranca automáticamente todo lo de ECS/Systems y los
-	                conecta al ServerWorld.
-	Cuándo usarlo: ya está conectado por SystemBootstrap, no necesitas
-	               llamarlo tú directamente salvo que quieras cargar Systems
-	               desde otra carpeta con SystemLoader.AddSystems(folder).
-	Cuándo NO usarlo: si no usas ECS, ignora este archivo (no se ejecuta nada
-	                  si la carpeta "Systems" está vacía).
+	SYSTEM LOADER (server)
+	What it is: the equivalent of Boot/Loader but for server ECS Systems.
+	Why it exists: automatically starts everything in ECS/Systems and
+	                connects them to the ServerWorld.
+	When to use it: already connected by SystemBootstrap, you don't need to
+	               call it directly unless you want to load Systems from
+	               another folder with SystemLoader.AddSystems(folder).
+	When NOT to use it: if you don't use ECS, ignore this file (nothing runs
+	                  if the "Systems" folder is empty).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1552,7 +1551,7 @@ local SystemRegistry = require(ReplicatedStorage.Framework.Shared.ECS.SystemRegi
 local World = require(ReplicatedStorage.Framework.Shared.ECS.World)
 type World = World.World
 
-local registry = SystemRegistry.new("System de servidor")
+local registry = SystemRegistry.new("server System")
 local started = false
 
 local SystemLoader = {}
@@ -1586,10 +1585,10 @@ return SystemLoader
 local ServerSystemBootstrapScript = make("Script", "SystemBootstrap", ServerECS)
 setSource(ServerSystemBootstrapScript, [==[
 --!strict
--- SYSTEM BOOTSTRAP (servidor)
--- Arranca el SystemLoader con el ServerWorld. Igual que Boot/Bootstrap pero
--- para el lado de ECS. Si no usas ECS, este script no hace nada dañino:
--- simplemente no encontrará Systems que cargar.
+-- SYSTEM BOOTSTRAP (server)
+-- Starts the SystemLoader with the ServerWorld. Same as Boot/Bootstrap but
+-- for the ECS side. If you don't use ECS, this script does nothing harmful:
+-- it simply won't find any Systems to load.
 
 local SystemLoader = require(script.Parent.SystemLoader)
 local ServerWorld = require(script.Parent.ServerWorld)
@@ -1603,25 +1602,25 @@ local ServerSystemsReadme = make("ModuleScript", "_README", ServerSystems)
 setSource(ServerSystemsReadme, [==[
 --!strict
 --[[
-	SYSTEMS (servidor) — carpeta explicada
+	SYSTEMS (server) — folder explained
 
-	PARA QUÉ SIRVE
-	Cada ModuleScript de aquí es un System: lógica que se ejecuta cada frame
-	(Heartbeat) sobre las entidades del ServerWorld que tengan ciertos
-	Components. Se cargan y ordenan solos por "Priority".
+	WHAT IT'S FOR
+	Every ModuleScript here is a System: logic that runs every frame
+	(Heartbeat) over the ServerWorld's entities that have certain
+	Components. They load and order themselves by "Priority".
 
-	CUÁNDO USARLA
-	Cuando tengas comportamiento que se repite en muchas entidades: daño,
-	movimiento de proyectiles, regeneración de vida, IA simple, etc.
+	WHEN TO USE IT
+	When you have behavior that repeats across many entities: damage,
+	projectile movement, health regen, simple AI, etc.
 
-	CUÁNDO NO USARLA
-	Para lógica que solo pasa una vez o que no encaja en "por cada entidad
-	con tal Component", un Service normal es más directo.
+	WHEN NOT TO USE IT
+	For logic that only happens once or doesn't fit "per entity
+	with such Component", a regular Service is more direct.
 
-	¿ES OBLIGATORIA?
-	No, esta carpeta puede quedarse vacía si no usas ECS en el servidor.
+	IS IT MANDATORY?
+	No, this folder can stay empty if you don't use ECS on the server.
 
-	EJEMPLO REAL
+	REAL EXAMPLE
 		-- Systems/RegenSystem.lua
 		local RegenSystem = { Name = "RegenSystem", Priority = 10 }
 
@@ -1642,12 +1641,12 @@ setSource(BootHealthCheckModule, [==[
 --!strict
 --[[
 	BOOT HEALTH CHECK
-	Qué es: un System de ejemplo, minúsculo, que solo confirma por consola
-	        que el ECS de servidor arrancó sin errores.
-	Por qué existe: como referencia rápida de "cómo se ve un System real" y
-	                para detectar de inmediato si algo rompió la carga.
-	Cuándo usarlo: no lo necesitas para nada funcional, es solo un ejemplo /
-	               canario. Puedes borrarlo con total seguridad.
+	What it is: a tiny example System that just confirms via console
+	        that the server ECS started without errors.
+	Why it exists: as a quick reference for "what a real System looks like" and
+	                to immediately detect if something broke the load.
+	When to use it: you don't need it for anything functional, it's just an
+	               example / canary. You can safely delete it.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1660,7 +1659,7 @@ local BootHealthCheck: Types.System = {
 }
 
 function BootHealthCheck:Init()
-	print("Framework: ECS de servidor activo, sin errores de carga.")
+	print("Framework: server ECS active, no load errors.")
 end
 
 return BootHealthCheck
@@ -1677,18 +1676,18 @@ local SPS_FrameworkReadme = make("ModuleScript", "_README", SPS_Framework)
 setSource(SPS_FrameworkReadme, [==[
 --!strict
 --[[
-	FRAMEWORK (CLIENTE) — carpeta explicada
+	FRAMEWORK (CLIENT) — folder explained
 
-	QUÉ HAY DENTRO
-	  Boot/Loader     -> arranca automáticamente todo lo de "Controllers".
-	  Controllers/    -> AQUÍ VAN TUS CONTROLLERS. Uno por ModuleScript.
-	  ECS/            -> World del cliente + arranque de Systems del cliente.
-	  ECS/Systems/    -> AQUÍ VAN TUS SYSTEMS DE CLIENTE (si usas ECS).
+	WHAT'S INSIDE
+	  Boot/Loader     -> automatically starts everything in "Controllers".
+	  Controllers/    -> YOUR CONTROLLERS GO HERE. One per ModuleScript.
+	  ECS/            -> client World + client Systems bootstrap.
+	  ECS/Systems/    -> YOUR CLIENT SYSTEMS GO HERE (if you use ECS).
 
-	Es el espejo exacto de ServerScriptService/Framework, pero para el
-	cliente: Controllers en vez de Services, mismo patrón de carga.
+	This is the exact mirror of ServerScriptService/Framework, but for the
+	client: Controllers instead of Services, same loading pattern.
 
-	Ver Controllers/_README y ECS/Systems/_README para más detalle.
+	See Controllers/_README and ECS/Systems/_README for more detail.
 ]]
 
 return nil
@@ -1700,12 +1699,12 @@ local ClientLoaderModule = make("ModuleScript", "Loader", SPS_Boot)
 setSource(ClientLoaderModule, [==[
 --!strict
 --[[
-	LOADER (cliente)
-	Qué es: el equivalente exacto del Loader de servidor, pero arranca
-	        "Controllers" en vez de "Services".
-	Cuándo usarlo: ya está conectado por Bootstrap. Usa
-	               Loader.AddControllers(folder) solo si quieres cargar
-	               Controllers desde otra carpeta además de la de por defecto.
+	LOADER (client)
+	What it is: the exact equivalent of the server Loader, but it starts
+	        "Controllers" instead of "Services".
+	When to use it: already connected by Bootstrap. Use
+	               Loader.AddControllers(folder) only if you want to load
+	               Controllers from another folder besides the default one.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1746,9 +1745,9 @@ return Loader
 local ClientBootstrapScript = make("LocalScript", "Bootstrap", SPS_Boot)
 setSource(ClientBootstrapScript, [==[
 --!strict
--- BOOTSTRAP (cliente)
--- Igual que el Bootstrap de servidor: arranca el Loader, que carga tus
--- Controllers. Único punto de entrada del lado del cliente.
+-- BOOTSTRAP (client)
+-- Same as the server Bootstrap: starts the Loader, which loads your
+-- Controllers. The only entry point on the client side.
 
 local Loader = require(script.Parent.Loader)
 
@@ -1760,30 +1759,30 @@ local SPS_ControllersReadme = make("ModuleScript", "_README", SPS_Controllers)
 setSource(SPS_ControllersReadme, [==[
 --!strict
 --[[
-	CONTROLLERS — carpeta explicada
+	CONTROLLERS — folder explained
 
-	PARA QUÉ SIRVE
-	El equivalente de "Services" pero en el cliente: cada ModuleScript aquí
-	es un Controller con Init/Start, pensado para UI, cámara, inputs,
-	efectos visuales, o cualquier lógica exclusiva del cliente.
+	WHAT IT'S FOR
+	The client equivalent of "Services": every ModuleScript here
+	is a Controller with Init/Start, meant for UI, camera, input,
+	visual effects, or any client-only logic.
 
-	CUÁNDO USARLA
-	Para organizar lógica de cliente por módulos con nombre propio: UI de
-	inventario, controles de cámara, efectos de sonido, HUD, etc.
+	WHEN TO USE IT
+	To organize client logic into named modules: inventory
+	UI, camera controls, sound effects, HUD, etc.
 
-	CUÁNDO NO USARLA
-	Para un LocalScript pequeño y puntual que no necesita Init/Start, un
-	LocalScript normal en otro lado también es válido.
+	WHEN NOT TO USE IT
+	For a small, one-off LocalScript that doesn't need Init/Start, a
+	regular LocalScript somewhere else is also valid.
 
-	¿ES OBLIGATORIA?
-	No. Puedes vaciar esta carpeta y usar LocalScripts normales si prefieres.
+	IS IT MANDATORY?
+	No. You can empty this folder and use regular LocalScripts if you prefer.
 
-	EJEMPLO REAL
+	REAL EXAMPLE
 		-- Controllers/HudController.lua
 		local HudController = { Name = "HudController" }
 
 		function HudController:Start()
-			print("HUD listo")
+			print("HUD ready")
 		end
 
 		return HudController
@@ -1799,13 +1798,13 @@ setSource(ClientWorldModule, [==[
 --!strict
 --[[
 	CLIENT WORLD
-	Qué es: el World (ECS) del lado del cliente, independiente del ServerWorld.
-	Por qué existe: para que la simulación visual del cliente (efectos,
-	                predicción, animaciones) tenga su propio estado de ECS,
-	                sin mezclarse con el World real del servidor.
-	Cuándo usarlo: require(script.Parent.ClientWorld) desde Systems o
-	               Controllers de cliente que necesiten leer/escribir ECS.
-	Cuándo NO usarlo: si no usas ECS en el cliente, ignora este archivo.
+	What it is: the (ECS) World on the client side, independent of the ServerWorld.
+	Why it exists: so the client's visual simulation (effects,
+	                prediction, animations) has its own ECS state,
+	                without mixing with the server's real World.
+	When to use it: require(script.Parent.ClientWorld) from client
+	               Systems or Controllers that need to read/write ECS.
+	When NOT to use it: if you don't use ECS on the client, ignore this file.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1818,12 +1817,12 @@ local ClientSystemLoaderModule = make("ModuleScript", "SystemLoader", ClientECS)
 setSource(ClientSystemLoaderModule, [==[
 --!strict
 --[[
-	SYSTEM LOADER (cliente)
-	Qué es: idéntico al SystemLoader de servidor, pero arranca los Systems
-	        de ECS/Systems del cliente contra el ClientWorld.
-	Cuándo usarlo: ya está conectado por SystemBootstrap. Usa
-	               SystemLoader.AddSystems(folder) solo para cargar Systems
-	               desde otra carpeta adicional.
+	SYSTEM LOADER (client)
+	What it is: identical to the server SystemLoader, but starts the
+	        ECS/Systems Systems on the client against the ClientWorld.
+	When to use it: already connected by SystemBootstrap. Use
+	               SystemLoader.AddSystems(folder) only to load Systems
+	               from an additional folder.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1832,7 +1831,7 @@ local SystemRegistry = require(ReplicatedStorage.Framework.Shared.ECS.SystemRegi
 local World = require(ReplicatedStorage.Framework.Shared.ECS.World)
 type World = World.World
 
-local registry = SystemRegistry.new("System de cliente")
+local registry = SystemRegistry.new("client System")
 local started = false
 
 local SystemLoader = {}
@@ -1866,9 +1865,9 @@ return SystemLoader
 local ClientSystemBootstrapScript = make("LocalScript", "SystemBootstrap", ClientECS)
 setSource(ClientSystemBootstrapScript, [==[
 --!strict
--- SYSTEM BOOTSTRAP (cliente)
--- Arranca el SystemLoader con el ClientWorld. Si no usas ECS en el cliente,
--- este script no hace nada dañino: simplemente no encuentra Systems.
+-- SYSTEM BOOTSTRAP (client)
+-- Starts the SystemLoader with the ClientWorld. If you don't use ECS on the
+-- client, this script does nothing harmful: it simply finds no Systems.
 
 local SystemLoader = require(script.Parent.SystemLoader)
 local ClientWorld = require(script.Parent.ClientWorld)
@@ -1882,23 +1881,23 @@ local ClientSystemsReadme = make("ModuleScript", "_README", ClientSystems)
 setSource(ClientSystemsReadme, [==[
 --!strict
 --[[
-	SYSTEMS (cliente) — carpeta explicada
+	SYSTEMS (client) — folder explained
 
-	PARA QUÉ SIRVE
-	Igual que Systems de servidor, pero corren en el cliente sobre el
-	ClientWorld: efectos visuales, animaciones, predicción de movimiento,
-	partículas ligadas a Components, etc.
+	WHAT IT'S FOR
+	Same as server Systems, but they run on the client over the
+	ClientWorld: visual effects, animations, movement prediction,
+	particles tied to Components, etc.
 
-	CUÁNDO USARLA
-	Cuando tengas efectos/comportamiento visual que se repite en muchas
-	entidades del cliente.
+	WHEN TO USE IT
+	When you have visual effects/behavior that repeats across many
+	client entities.
 
-	CUÁNDO NO USARLA
-	Para UI o lógica de cliente que no es "por entidad", usa un Controller
-	normal en su lugar, es más simple.
+	WHEN NOT TO USE IT
+	For UI or client logic that isn't "per entity", use a regular
+	Controller instead, it's simpler.
 
-	¿ES OBLIGATORIA?
-	No, puede quedarse vacía si no usas ECS en el cliente.
+	IS IT MANDATORY?
+	No, it can stay empty if you don't use ECS on the client.
 ]]
 
 return nil
@@ -1906,5 +1905,5 @@ return nil
 
 -- ============================================================
 
-ChangeHistoryService:SetWaypoint("Framework generado (con documentación)")
-print("Framework generado correctamente. Revisa el Explorer: cada carpeta importante tiene su propio '_README'.")
+ChangeHistoryService:SetWaypoint("Framework generated (with documentation)")
+print("Framework generated successfully. Check the Explorer: every important folder has its own '_README'.")
