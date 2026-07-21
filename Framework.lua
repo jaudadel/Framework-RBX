@@ -1,5 +1,5 @@
 --!strict
--- FRAMEWORK BUILDER v3 — with integrated documentation
+-- FRAMEWORK BUILDER with integrated documentation
 -- Paste the whole thing into Roblox Studio's Command Bar (View > Command Bar)
 
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
